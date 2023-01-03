@@ -1,25 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import data from "./resource/countryData";
+import "./App.css"
 
 function App() {
+  const [value, setValue] = useState("");
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+   const handleSearch=()=>{
+    setTimeout( ()=>{
+    
+      document.getElementById('top-search').innerHTML = `Searching for ${value}...`
+     }, 1000)
+   }
+
+  
+
+  const keyPress = (e)=>{
+    if(e.key==="Escape"){
+      console.log(e.key)
+      document.getElementById("dropdown").style.display = "none";
+    }
+    else{
+      document.getElementById("dropdown").style.display = "block";
+    }
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 id="top-search">Search</h1>
+
+      <div>
+        <div>
+          <input type="text" value={value} onChange={handleChange} onKeyDown={keyPress} />
+          <button onClick={handleSearch}>Search </button>
+        </div>
+        <div id="dropdown">
+          {data.filter((e) => {
+              return (
+                value &&
+                e.name.startsWith(value)  &&
+                e.name !== value
+              );
+            })
+            .map((i) => {
+              return (
+              <div onClick={() => setValue(i.name)}>
+            
+                  
+                {i.name}
+                
+            
+              </div>
+            )})}
+        </div>
+      </div>
     </div>
   );
 }
 
-export default App;
+export default App
